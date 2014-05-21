@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>LACKP Kickball Teams</title>
+    <!-- <link rel="stylesheet" href="home.css" /> -->
+  </head>
+
+  <body>
+    <h1>LACKP Kickball Teams</h1>
+
+    <ul>
+      <% @data.keys.each do |team| %>
+        <li><a href="/teams/<%= team %>"><%= team %></a></li>
+      <% end %>
+    </ul>
+  </body>
+</html>
