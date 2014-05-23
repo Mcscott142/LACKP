@@ -7,11 +7,12 @@
 
   <body>
     <h1>LACKP Kickball Teams</h1>
+      <ul>
+        <% @team_names.each do |team|  %>
+          <li><a href="<%= "/teams/#{team}" %>"> <%= team %></li>
+        <% end %>
+      </ul>
 
-    <ul>
-      <% @data.keys.each do |team| %>
-        <li><a href="/teams/<%= team %>"><%= team %></a></li>
-      <% end %>
-    </ul>
+
   </body>
 </html>

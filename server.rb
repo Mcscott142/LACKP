@@ -1,37 +1,44 @@
 require 'sinatra'
 require 'csv'
 require 'pry'
-require 'uri'
+#require 'sinatra/reloader'
 
-def read_in_teams
-  @teams = {}
-  CSV.foreach('lackp_starting_rosters.csv', headers: true) do |row|
-    # player_info << row.to_hash
-    first_name = row["first_name"]
-    last_name = row["last_name"]
-    position = row["position"]
-    team = row["team"]
-
-    if !@teams.has_key?(team)
-      @teams[team] = []
-    end
-
-    @teams[team] << [first_name, last_name, position]
+def import_file(csv)
+   players = []
+  CSV.foreach(csv, headers: true , header_converters: :symbol) do |player|
+    players << player
   end
-  return @teams
+   players
 end
 
-# puts read_in_teams.keys
+def sort_teams(team)
+  players = import_file('lackp_starting_rosters.csv')
+  roster = []
 
-get '/' do
-  @data = read_in_teams()
+  players.each do |player|
+    roster << player if player[:team] == team
+  end
+  roster
+end
+
+
+get '/teams' do
+  @players = import_file('lackp_starting_rosters.csv')
+  @team_names =[]
+  @players.each do |player|
+    if !@team_names.include?(player[:team])
+      @team_names << player[:team]
+    end
+    #binding.pry
+  end
+
   erb :index
+
 end
 
-get "/teams/:team_name" do
-  @team_name = params[:team_name]
-  @data = read_in_teams
+get '/teams/:team' do
+  @team = sort_teams(params[:team])
   #binding.pry
-  erb :teampage
+  erb :show
 end
 
